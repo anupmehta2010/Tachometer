@@ -29,7 +29,8 @@ This project is a robust, configurable digital tachometer using an **Arduino Nan
 - **16x2 I2C LCD** (commonly 0x27 or 0x3F)
 - **12V DC power supply**
 - **LM7805 voltage regulator** (for stable 5V output)
-- **Perfboard, header pins, wires, capacitors**
+- **DC Jack input** (for dc power supply to arduino nano)
+- **Perfboard, header pins, wires/jumpers**
 - **Black reflective tape or paint** (for wheel markers)
 - **Optional:** Enclosure for protection
 
@@ -53,41 +54,49 @@ Power the Nano’s VIN pin with regulated 5V from the LM7805, which is fed by yo
 
 At the top of the code, set these constants as needed:
 
-## define PULSES_PER_REV 4 // Number of black strips/markers on your wheel
-
-## define CALIBRATION_REVS 3 // Number of revolutions for calibration
+define PULSES_PER_REV 4 // Number of black strips/markers on your wheel
+define CALIBRATION_REVS 3 // Number of revolutions for calibration
 
 **Example:**  
 If your wheel has 6 strips and you want to calibrate for 2 revolutions:
 
-## define PULSES_PER_REV 6
-
-## define CALIBRATION_REVS 2
+define PULSES_PER_REV 6
+define CALIBRATION_REVS 2
 
 ---
 
 ## How It Works
 
 1. **Startup:**
-    - LCD: `Tachometer` / `initialization...`
+    - LCD:
+    `Tachometer`
+    `initialization...`
     - Waits for first pulse.
 
 2. **Calibration:**
-    - LCD: `Reading pulses...` / `calibrating...`
+    - LCD:
+    `Reading pulses...`
+    `calibrating...`
     - Collects pulses for `CALIBRATION_REVS` revolutions.
     - After calibration, adds these revolutions to total count.
 
 3. **Measurement:**
-    - LCD: `RPM: <value>  RPH: <value>` / `Total Revs: <value>`
+    - LCD:
+    `RPM: <value>  RPH: <value>`
+    `Total Revs: <value>`
     - RPM and RPH are updated only after every 2 revolutions if speed changes.
     - Total revolutions are incremented every full revolution (including calibration revolutions).
 
 4. **Inactivity:**
     - If no pulses for 20 seconds:
-        - LCD: `No Rotation.` / `Total Revs: <value>`
+        - LCD:
+        `No Rotation.`
+        `Total Revs: <value>`
         - System waits for new pulses.
     - On new pulse:
-        - LCD: `Pulse Detected` / `Restarting...`
+        - LCD:
+        `Pulse Detected`
+        `Restarting...`
         - System restarts calibration.
 
 5. **Reset:**
@@ -123,22 +132,22 @@ If your wheel has 6 strips and you want to calibrate for 2 revolutions:
 
 ## Example LCD Screens
 
-- Tachometer
-- initialization...
+- `Tachometer`
+  `initialization...`
 
-- Reading pulses...
-- calibrating...
+- `Reading pulses...`
+   `calibrating...`
 
-- Calibrated.
+- `Calibrated.`
 
-- RPM: 1234 RPH: 74040
-- Total Revs: 7
+- `RPM: 60 RPH: 3600`
+  `Total Revs: 7`
 
-- No Rotation.
-- Total Revs: 42
+- `No Rotation.`
+  `Total Revs: 42`
 
-- Pulse Detected
-- Restarting...
+- `Pulse Detected`
+  `Restarting...`
 
 ---
 
@@ -154,14 +163,14 @@ If your wheel has 6 strips and you want to calibrate for 2 revolutions:
 
 ## License
 
-This project is released under the MIT License.  
-Feel free to use and modify for your own industrial or hobby applications!
+- This project is released under the MIT License.  
+- Feel free to use and modify for your own industrial or hobby applications!
 
 ---
 
 ## Support
 
-For questions, improvements, or troubleshooting, use the Serial Monitor output for debugging or open an issue in your project repository.
+- For questions, improvements, or troubleshooting, use the Serial Monitor output for debugging or open an issue in your project repository.
 
 ---
 
