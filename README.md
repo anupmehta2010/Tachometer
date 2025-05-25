@@ -22,6 +22,37 @@ This project is a robust, configurable digital tachometer using an **Arduino Nan
 
 ---
 
+## Library Requirements
+
+This project uses the following Arduino libraries:
+
+- [`Wire`](https://www.arduino.cc/en/Reference/Wire) (built-in)
+- [`EEPROM`](https://www.arduino.cc/en/Reference/EEPROM) (built-in)
+- [`LiquidCrystal_I2C`](https://github.com/johnrickman/LiquidCrystal_I2C) (external)
+
+### How to Install Libraries
+
+#### 1. **Wire and EEPROM**
+
+These libraries are included by default with the Arduino IDE. No installation is required.
+
+#### 2. **LiquidCrystal_I2C**
+
+## Option A: Using Arduino Library Manager**
+
+1. Open the Arduino IDE.
+2. Go to **Sketch → Include Library → Manage Libraries...**
+3. In the Library Manager, search for `LiquidCrystal I2C`.
+4. Find **"LiquidCrystal I2C by Frank de Brabander"** or **"LiquidCrystal I2C by John Rickman"** and click **Install**.
+
+## Option B: Manual Installation
+
+1. Download the library ZIP from [this GitHub link](https://github.com/johnrickman/LiquidCrystal_I2C).
+2. In the Arduino IDE, go to **Sketch → Include Library → Add .ZIP Library...**
+3. Select the downloaded ZIP file and click **Open**.
+
+---
+
 ## Hardware Requirements
 
 - **Arduino Nano**
