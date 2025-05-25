@@ -69,20 +69,20 @@ define CALIBRATION_REVS 2
 
 1. **Startup:**
     - LCD:
-    `Tachometer`
+    `Tachometer`  
     `initialization...`
     - Waits for first pulse.
 
 2. **Calibration:**
     - LCD:
-    `Reading pulses...`
+    `Reading pulses...`  
     `calibrating...`
     - Collects pulses for `CALIBRATION_REVS` revolutions.
     - After calibration, adds these revolutions to total count.
 
 3. **Measurement:**
     - LCD:
-    `RPM: <value>  RPH: <value>`
+    `RPM: <value>  RPH: <value>`  
     `Total Revs: <value>`
     - RPM and RPH are updated only after every 2 revolutions if speed changes.
     - Total revolutions are incremented every full revolution (including calibration revolutions).
@@ -90,12 +90,12 @@ define CALIBRATION_REVS 2
 4. **Inactivity:**
     - If no pulses for 20 seconds:
         - LCD:
-        `No Rotation.`
+        `No Rotation.`  
         `Total Revs: <value>`
         - System waits for new pulses.
     - On new pulse:
         - LCD:
-        `Pulse Detected`
+        `Pulse Detected`  
         `Restarting...`
         - System restarts calibration.
 
@@ -132,21 +132,21 @@ define CALIBRATION_REVS 2
 
 ## Example LCD Screens
 
-- `Tachometer`
+- `Tachometer`  
   `initialization...`
 
-- `Reading pulses...`
+- `Reading pulses...`  
    `calibrating...`
 
 - `Calibrated.`
 
-- `RPM: 60 RPH: 3600`
+- `RPM: 60 RPH: 3600`  
   `Total Revs: 7`
 
-- `No Rotation.`
+- `No Rotation.`  
   `Total Revs: 42`
 
-- `Pulse Detected`
+- `Pulse Detected`  
   `Restarting...`
 
 ---
