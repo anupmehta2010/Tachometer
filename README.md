@@ -54,13 +54,13 @@ Power the Nano’s VIN pin with regulated 5V from the LM7805, which is fed by yo
 
 At the top of the code, set these constants as needed:
 
-define PULSES_PER_REV 4 // Number of black strips/markers on your wheel
+define PULSES_PER_REV 4 // Number of black strips/markers on your wheel  
 define CALIBRATION_REVS 3 // Number of revolutions for calibration
 
 **Example:**  
 If your wheel has 6 strips and you want to calibrate for 2 revolutions:
 
-define PULSES_PER_REV 6
+define PULSES_PER_REV 6  
 define CALIBRATION_REVS 2
 
 ---
@@ -68,20 +68,20 @@ define CALIBRATION_REVS 2
 ## How It Works
 
 1. **Startup:**
-    - LCD:
+    - LCD:  
     `Tachometer`  
     `initialization...`
     - Waits for first pulse.
 
 2. **Calibration:**
-    - LCD:
+    - LCD:  
     `Reading pulses...`  
     `calibrating...`
     - Collects pulses for `CALIBRATION_REVS` revolutions.
     - After calibration, adds these revolutions to total count.
 
 3. **Measurement:**
-    - LCD:
+    - LCD:  
     `RPM: <value>  RPH: <value>`  
     `Total Revs: <value>`
     - RPM and RPH are updated only after every 2 revolutions if speed changes.
@@ -89,12 +89,12 @@ define CALIBRATION_REVS 2
 
 4. **Inactivity:**
     - If no pulses for 20 seconds:
-        - LCD:
+        - LCD:  
         `No Rotation.`  
         `Total Revs: <value>`
         - System waits for new pulses.
     - On new pulse:
-        - LCD:
+        - LCD:  
         `Pulse Detected`  
         `Restarting...`
         - System restarts calibration.
