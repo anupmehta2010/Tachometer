@@ -40,7 +40,7 @@ This project is a robust, configurable digital tachometer using an Arduino Nano,
 
 ### STL Files Included
 
-- **`Tachometer_Case.stl`** - Open case for the tachometer project where lcd display and the arduino nano on perfboard is mounted.
+- **`tachometer_case.stl`** - Open case for the tachometer project where lcd display and the arduino nano on perfboard is mounted.
 
 ### Print Settings
 
