@@ -1,187 +1,343 @@
 # Arduino Nano Advanced Tachometer V2
 
+![Tachometer in Action](./images/Tachometer_Action.jpg)
+*Arduino Nano tachometer with 3D-printed case and LCD display*
+
 ## Overview
 
-This project is a streamlined, high-precision digital tachometer using an Arduino Nano, a TCRT5000 IR reflective sensor, and a 16x2 I2C LCD. It measures RPM (revolutions per minute), RPH (revolutions per hour), and total revolutions of a rotating object with black strips/markers. The system features smooth filtering, customizable debounce, and is designed for industrial or long-term monitoring applications.
+This project is a robust, configurable digital tachometer using an Arduino Nano, a TCRT5000 IR reflective sensor, and a 16x2 I2C LCD display housed in a custom 3D-printed case. It measures RPM (revolutions per minute), RPH (revolutions per hour), and total revolutions of a rotating object with black strips/markers. The system features high precision, floating-point display, and advanced debouncing for reliable measurements in various environments.
 
-## Features
+## Project Images
 
-- **User-Configurable Settings**: Easy-to-adjust constants at the top of the code for customization
-- **Configurable Strips Per Revolution**: Set the number of markers/strips on your wheel for accurate measurement
-- **Real-Time Smoothed Readings**: Adjustable smoothing factor for stable, noise-immune RPM readings
-- **Floating-Point Precision**: High-precision decimal RPM & RPH values instead of integers
-- **Debounce Protection**: Configurable debounce time to prevent false readings from metal vibration or reflection
-- **Pulse Timeout**: Automatically zeros the display when rotation stops
-- **Total Revolution Tracking**: Keeps count of total revolutions
-- **Interrupt-Driven**: Uses hardware interrupts for precise timing and detection
-- **Moving Average Filtering**: For stable, noise-immune RPM readings
-- **Periodic Display Updates**: Configurable refresh rate for the LCD display
-- **Comprehensive Serial Debugging**: All measurement updates are logged to Serial Monitor
+### Assembled Device
 
-## Library Requirements
+![Front View](./images/Tachometer.jpg)
+*Front view showing the LCD display and compact red case*
 
-This project uses the following Arduino libraries:
+![Internal Components](./images/Mount.jpg)
+*Internal view showing Arduino Nano, IR sensor, mount and wiring*
 
-- Wire (built-in)
-- LiquidCrystal_I2C (external)
+![Side View](./images/Internal_Components.jpg)
+*Side view showing the breadboard layout and connections*
 
-## How to Install Libraries
+### Wiring
+![Diagram](./hardware/schematics/wiring.png)
+*Wiring is same for Arduino nano*
 
-1. **Wire**
-   This library is included by default with the Arduino IDE. No installation is required.
+## Key Features
 
-2. **LiquidCrystal_I2C**
-   **Option A: Using Arduino Library Manager**
-   - Open the Arduino IDE
-   - Go to Sketch → Include Library → Manage Libraries...
-   - In the Library Manager, search for "LiquidCrystal I2C"
-   - Find "LiquidCrystal I2C by Frank de Brabander" or "LiquidCrystal I2C by John Rickman" and click Install
+- **High Precision Measurements**: Uses floating-point calculations for accurate RPM readings with decimal places
+- **Configurable Pulse Detection**: Set the number of markers/strips on your wheel for accurate measurement
+- **Advanced Smoothing**: Configurable `RPM_SMOOTHING` factor for stable, noise-immune readings
+- **Metal-Optimized Debouncing**: `DEBOUNCE_MICROS` setting prevents false readings from reflective metal surfaces
+- **Interrupt-Driven Detection**: Hardware interrupts for precise pulse timing without blocking main loop
+- **Pulse Timeout Protection**: Automatically resets to zero after specified inactivity period
+- **Total Revolution Tracking**: Cumulative rotation counter
+- **Custom 3D-Printed Enclosure**: Professional-looking protective case with easy access
+- **Direct 5V Power Supply**: Simplified power delivery with capacitive filtering
 
-   **Option B: Manual Installation**
-   - Download the library ZIP from this [GitHub link](https://github.com/johnrickman/LiquidCrystal_I2C)
-   - In the Arduino IDE, go to Sketch → Include Library → Add .ZIP Library...
-   - Select the downloaded ZIP file and click Open
+## 3D Printed Case Files
+
+### STL Files Included
+
+- **`Tachometer_Case.stl`** - Open case for the tachometer project where lcd display and the arduino nano on perfboard is mounted.
+
+### Print Settings
+
+| Parameter | Value | Notes |
+|-----------|--------|-------|
+| Layer Height | 0.2mm | For good surface finish |
+| Infill | 20-25% | Sufficient strength |
+| Perimeters | 3-4 | Strong walls |
+| Support | Only for overhangs | Minimal supports needed |
+| Material | PLA or PLA+ | Easy to print, durable |
+| Print Speed | 50-80mm/s | Quality over speed |
+| Nozzle Temperature | 210°C (PLA+) | Adjust for your filament |
+| Bed Temperature | 60°C | Good adhesion |
+
+### Case Features
+
+- **LCD Window**: Precision-cut opening for 16x2 display
+- **Arduino Mounts**: Secure mounting points for Arduino Nano
+- **IR Sensor Bracket**: Adjustable positioning for optimal detection
+- **Cable Management**: Built-in channels for clean wiring
+- **Power Jack Access**: Easy access to DC power connector
+- **Ventilation**: Air vents for heat dissipation
+- **Professional Finish**: Smooth surfaces with minimal post-processing needed
 
 ## Hardware Requirements
 
-- Arduino Nano
-- TCRT5000 IR reflective sensor (digital output)
-- 16x2 I2C LCD (commonly 0x27 or 0x3F address)
-- 5V DC power supply (stable)
-- 22µF 50V electrolytic capacitor
-- DC Jack input (for DC power supply to Arduino Nano)
-- Perfboard, header pins, wires/jumpers
-- Black reflective tape or paint (for wheel markers)
-- Optional: Enclosure for protection
+### Electronic Components
 
-## Wiring
+- Arduino Nano (or compatible)
+- TCRT5000 IR reflective sensor module
+- 16x2 I2C LCD (address 0x27 or 0x3F)
+- 22μF 50V electrolytic capacitor
+- 5V DC power adapter (2A recommended)
+- DC barrel jack (5.5mm x 2.1mm)
+- Perfboard or PCB
+- Header pins and jumper wires
 
-| Component        | Arduino Nano Pin | Notes               |
-|------------------|------------------|---------------------|
-| TCRT5000 OUT     | D2 (INT0)        | Digital output, interrupt |
-| TCRT5000 VCC     | 5V               |                     |
-| TCRT5000 GND     | GND              |                     |
-| LCD SDA          | A4               | I2C data            |
-| LCD SCL          | A5               | I2C clock           |
-| LCD VCC          | 5V               |                     |
-| LCD GND          | GND              |                     |
-| Power Supply +5V | 5V pin           | Direct connection   |
-| Power Supply GND | GND pin          | Direct connection   |
-| Capacitor +      | 5V pin           | Parallel with power |
-| Capacitor -      | GND pin          | Parallel with power |
+### Hardware Components
 
-**Note**: In this version, the 5V regulator has been removed. The DC power supply (5V) connects directly to the 5V and GND pins of the Arduino Nano. A 22µF 50V electrolytic capacitor is connected in parallel between 5V and GND for power filtering and stability.
+- M3 screws (various lengths: 6mm, 12mm, 16mm)
+- M3 nuts
+- Heat shrink tubing
+- Reflective tape or markers for target object
 
-## Power Supply Considerations
+## Library Requirements
 
-- This project requires a stable 5V DC power supply
-- Connect the power supply directly to the 5V and GND pins of the Arduino Nano
-- The 22µF electrolytic capacitor helps filter noise and stabilize the power supply
-- **IMPORTANT**: Make sure your power supply outputs a clean 5V (±0.2V) to prevent damage to the Arduino
-- **CAUTION**: When connecting an electrolytic capacitor, observe correct polarity (+ to 5V, - to GND)
-- **WARNING**: Never connect USB power while also powering through the 5V pin to avoid damaging the Arduino
+### Wire (Built-in)
+
+No installation required - included with Arduino IDE.
+
+### LiquidCrystal_I2C (External)
+
+**Option A: Arduino Library Manager**
+
+1. Open Arduino IDE
+2. Go to **Sketch → Include Library → Manage Libraries...**
+3. Search for "LiquidCrystal I2C"
+4. Install "LiquidCrystal I2C by Frank de Brabander"
+
+**Option B: Manual Installation**
+
+1. Download from [GitHub](https://github.com/johnrickman/LiquidCrystal_I2C)
+2. **Sketch → Include Library → Add .ZIP Library...**
+3. Select downloaded ZIP file
+
+## Wiring Diagram
+
+| Component | Arduino Nano Pin | Wire Color | Notes |
+|-----------|-----------------|------------|-------|
+| **TCRT5000** | | | |
+| VCC | 5V | Red | Power supply |
+| GND | GND | Black | Ground |
+| OUT | D2 (INT0) | Blue | Digital output, interrupt |
+| **I2C LCD** | | | |
+| VCC | 5V | Red | Power supply |
+| GND | GND | Black | Ground |
+| SDA | A4 | Green | I2C data line |
+| SCL | A5 | Yellow | I2C clock line |
+| **Power Supply** | | | |
+| +5V | 5V | Red | Direct to 5V pin |
+| GND | GND | Black | Direct to GND pin |
+| **Capacitor** | | | |
+| Positive | 5V | Red | 22μF electrolytic |
+| Negative | GND | Black | Observe polarity! |
+
+### ⚠️ **IMPORTANT POWER SUPPLY WARNINGS**
+
+- **Never connect USB and 5V power simultaneously!** This can damage your Arduino
+- **Check capacitor polarity** - Wrong polarity can cause failure or explosion
+- **Use regulated 5V supply** - Input voltage tolerance: 4.8V - 5.2V
+- **Current capacity** - Minimum 1A, 2A recommended for stable operation
 
 ## Software Configuration
 
-At the top of the code, you can adjust these constants as needed:
+### User-Configurable Constants
 
 ```cpp
-// =================== USER-CONFIGURABLE SETTINGS ===================
-const uint8_t STRIPS_PER_REVOLUTION = 4;       // 4 black strips
-const unsigned long DEBOUNCE_MICROS = 250000;  // 250ms debounce for metal
-const float RPM_SMOOTHING = 0.92;              // Heavy smoothing for stability
-const unsigned long PULSE_TIMEOUT = 120000000; // 2 minutes (in µs)
-const uint16_t DISPLAY_UPDATE_INTERVAL = 5000; // 5 seconds
-// ===================================================================
+const uint8_t STRIPS_PER_REVOLUTION = 4;       // Number of black strips/markers
+const unsigned long DEBOUNCE_MICROS = 250000;  // 250ms debounce for metal surfaces
+const float RPM_SMOOTHING = 0.92;              // Heavy smoothing (0.0-1.0)
+const unsigned long PULSE_TIMEOUT = 120000000; // 2 minutes timeout (microseconds)
+const uint16_t DISPLAY_UPDATE_INTERVAL = 5000; // 5 seconds display refresh
 ```
 
-### Configuration Parameters
+### Configuration Examples
 
-- **STRIPS_PER_REVOLUTION**: Number of black strips/markers on your wheel
-- **DEBOUNCE_MICROS**: Minimum time (in microseconds) between valid pulses to prevent bouncing
-- **RPM_SMOOTHING**: Value between 0-1 determining how much smoothing to apply (higher = smoother)
-- **PULSE_TIMEOUT**: Time (in microseconds) after which RPM is set to zero if no pulses are detected
-- **DISPLAY_UPDATE_INTERVAL**: Time (in milliseconds) between LCD display updates
+**For a wheel with 6 reflective strips:**
 
-## How It Works
-
-### Initialization
-
-1. LCD initializes and displays "Initializing..."
-2. IR sensor pin is configured with a pull-up resistor
-3. Interrupt is attached to the falling edge of the IR sensor signal
-4. LCD is cleared and initial display is updated with zeros
-
-### Measurement
-
-1. The IR sensor detects black strips/markers as they pass by
-2. Each detection triggers an interrupt that calculates pulse intervals
-3. The main loop calculates current RPM using a moving average of pulse intervals
-4. RPH (revolutions per hour) is calculated by multiplying RPM by 60
-5. Total revolutions are tracked by dividing total pulses by strips per revolution
-6. The LCD display is updated periodically with the current values
-7. Serial output provides debugging information
-
-### Display
-
-- **RPM**: Current revolutions per minute (with 3 decimal places)
-- **RPH**: Current revolutions per hour (with 1 decimal place)
-- **Total Revs**: Cumulative number of complete revolutions
-
-## Serial Debugging
-
-- All RPM/RPH updates and total revolution counts are logged to the Serial Monitor
-- Use 115200 baud rate for Serial Monitor
-
-## Customization
-
-- Change `STRIPS_PER_REVOLUTION` to match your wheel's number of black strips or markers
-- Adjust `RPM_SMOOTHING` to balance between responsive readings and stability
-- Increase `DEBOUNCE_MICROS` if you get erratic readings due to vibrations or reflections
-- Modify `PULSE_TIMEOUT` to change how quickly the display zeros when rotation stops
-- Change `DISPLAY_UPDATE_INTERVAL` to update the LCD more or less frequently
-
-## Example LCD Screens
-
-```
-Initializing...
+```cpp
+const uint8_t STRIPS_PER_REVOLUTION = 6;
 ```
 
-```
-RPM:0.000
-RPH:0.0
-```
+**For more responsive readings (less stable):**
 
-```
-RPM:60.125
-RPH:3607.5
+```cpp
+const float RPM_SMOOTHING = 0.80;  // Less smoothing, more responsive
 ```
 
-## Troubleshooting & Tips
+**For noisy environments:**
 
-- **No display on LCD**: Double-check I2C address (default is 0x27, but might be 0x3F)
-- **Erratic RPM**: Increase `DEBOUNCE_MICROS` or improve the contrast of your markers
-- **Always reading zero**: Check sensor alignment and ensure it's detecting the markers
-- **Inaccurate readings**: Verify `STRIPS_PER_REVOLUTION` matches your actual marker count
-- **Power issues**: Ensure your 5V supply is stable and the capacitor is correctly connected
-- **Unstable readings**: Increase `RPM_SMOOTHING` value closer to 1.0 for more stability
+```cpp
+const unsigned long DEBOUNCE_MICROS = 500000;  // 500ms debounce
+```
 
-## Differences from Previous Version
+## Assembly Instructions
 
-- Simplified code with no state machine or auto-calibration
-- Removed EEPROM storage of total revolutions
-- Direct 5V power connection instead of using voltage regulator
-- Added power filtering capacitor for stability
-- Floating-point precision for RPM and RPH values
-- Configurable smoothing factor for stable readings
-- Interrupt-driven pulse detection for higher accuracy
-- Customizable display update interval
+### Step 1: Print the Case
+
+1. Download STL files from the project repository
+2. Slice with recommended settings
+3. Print the Case
+
+### Step 2: Prepare Electronics
+
+1. **Install capacitor** - Connect 22μF capacitor between 5V and GND pins (observe polarity!)
+2. **Mount Arduino** - Secure Arduino Nano to bottom case with M3 screws
+3. **Install LCD** - Mount I2C LCD to top case window
+
+### Step 3: Wiring
+
+1. Follow the wiring diagram above
+2. Use colored wires for easy identification
+3. Test all connections with multimeter
+4. Ensure no short circuits
+
+### Step 4: Programming
+
+1. Connect Arduino via USB
+2. Select **Tools → Board → Arduino Nano**
+3. Select correct **Port**
+4. Upload the provided code
+5. Open Serial Monitor (115200 baud) for debugging
+
+### Step 5: Final Assembly
+
+1. Mount IR sensor to bracket
+2. Position sensor for optimal detection (2-5mm from target)
+3. Secure all wiring with zip ties or adhesive
+4. Close case with M3 screws
+5. Connect 5V power supply (NOT USB!)
+
+## Usage Instructions
+
+### Setup
+
+1. **Prepare target object** - Apply reflective markers or tape at regular intervals
+2. **Position sensor** - Mount IR sensor 2-5mm from rotation path
+3. **Power on** - Connect 5V DC adapter (never with USB connected!)
+
+### Operation
+
+- **LCD Display** shows real-time RPM, RPH, and total revolutions
+- **Serial Monitor** provides detailed debugging information
+- **Automatic timeout** resets readings if no pulses detected
+- **Precision display** shows decimal values for accurate measurements
+
+### Reading the Display
+
+```
+RPM: 123.456    (Current revolutions per minute)
+RPH: 7407.4     (Current revolutions per hour)
+Total Revs: 456 (Cumulative revolution count)
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**No Display on LCD**
+
+- Check I2C address (scan with I2C scanner sketch)
+- Verify wiring connections
+- Check power supply voltage
+
+**Inaccurate RPM Readings**
+
+- Confirm `STRIPS_PER_REVOLUTION` matches your setup
+- Check sensor distance and alignment
+- Verify reflective markers are properly applied
+
+**Unstable Readings**
+
+- Increase `RPM_SMOOTHING` factor (closer to 1.0)
+- Check for vibrations affecting sensor
+- Shield sensor from ambient light
+
+**False Triggers**
+
+- Increase `DEBOUNCE_MICROS` value
+- Improve marker contrast (black vs. reflective)
+- Check sensor mounting stability
+
+**No Power/Random Resets**
+
+- Check capacitor polarity and connection
+- Verify 5V supply stability and current capacity
+- Ensure no loose connections
+
+### Serial Debugging
+
+Open Serial Monitor at **115200 baud** for real-time debugging:
+
+- Current RPM, RPH, and revolution count
+- Pulse timing information
+- System status messages
+
+## Advanced Customization
+
+### Performance Tuning
+
+- **High-speed applications**: Reduce `DEBOUNCE_MICROS` to 50000 (50ms)
+- **Low-speed applications**: Increase `PULSE_TIMEOUT` to 300000000 (5 minutes)
+- **Noisy environments**: Increase smoothing factor to 0.95+
+
+### Display Modifications
+
+- Change `DISPLAY_UPDATE_INTERVAL` for faster/slower refresh
+- Modify code to show additional calculated values
+- Add peak RPM recording functionality
+
+## Files in This Repository
+
+```
+Arduino-Tachometer-V2/
+├── README.md                       # This file
+├── LICENSE                         # Opensource MIT License
+├── src/
+│   ├── tachometer_v2.ino           # Main Arduino sketch
+│   └── libraries/                  # Required libraries
+├── hardware/
+│   ├── 3d_models/
+│   │   └── tachometer_case.stl     # Case
+│   └── schematics/
+│       └── wiring_diagram.png      # Connection diagram                 
+├── images/
+│   ├── Internal_Components.jpg     # Device photos
+│   ├── Mount.jpg
+│   ├── Tachometer_Action.jpg
+│   └── Tachometer.jpg
+└── docs/
+    └──  assembly_guide.pdf          # Detailed assembly
+```
+
+## Version History
+
+### V2.0 (Current)
+
+- **Floating-point precision** - Decimal RPM/RPH display
+- **Simplified power supply** - Direct 5V connection with capacitive filtering
+- **Improved debouncing** - Configurable metal-surface debouncing
+- **3D-printed case** - Professional enclosure design
+- **Interrupt-driven** - Hardware interrupts for precise timing
+
+### V1.0 (Previous)
+
+- Integer RPM display only
+- Complex state machine
+- EEPROM storage
+- Auto-calibration system
+- LM7805 voltage regulation
 
 ## License
 
-This project is released under the MIT License.
-Feel free to use and modify for your own industrial or hobby applications!
+This project is released under the **MIT License**. Feel free to use, modify, and distribute for personal and commercial applications.
 
 ## Support
 
-For questions, improvements, or troubleshooting, use the Serial Monitor output for debugging or open an issue in your project repository.
+- **Issues**: Report bugs via GitHub Issues
+- **Documentation**: Check the `/docs` folder for detailed guides
+- **Community**: Join our discussions for tips and improvements
+
+## Acknowledgments
+
+- Thanks to the Arduino community for libraries and inspiration
+- STL files designed for optimal printability and functionality
+- Tested across multiple hardware configurations for reliability
+
+---
+
+**⚡ Safety Reminder**: Always double-check power connections and never mix USB and external power supplies!
